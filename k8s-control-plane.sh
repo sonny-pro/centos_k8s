@@ -15,28 +15,25 @@ sudo echo '1' > /proc/sys/net/bridge/bridge-nf-call-ip6tables
 
 sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
 
+# Add Kubernetes repo
+sudo cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
+sudo yum makecache -y
+
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
 # Configure cgroup driver used by kubelet on control-plane node
-sudo sed -i '/^KUBELET_EXTRA_ARGS=/ s/$/--cgroup-driver=systemd/' /etc/sysconfig/kubelet
-
-# Ensure iptables aren't being bypassed
-sudo cat <<EOF >  /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-EOF
-sudo sysctl --system
+sudo sed -i '/^KUBELET_EXTRA_ARGS=/ s/$/--cgroup-driver=systemd --allow-privileged --feature-gates=VolumeSnapshotDataSource=true,KubeletPluginsWatcher=true,CSINodeInfo=true,CSIDriverRegistry=true/' /etc/sysconfig/kubelet
 
 sudo systemctl enable --now kubelet
-
-sudo mkdir /var/lib/weave
-sudo echo "s3cr3tp4ssw0rd" > weave-passwd
-sudo mv weave-passwd /var/lib/weave/
-
-docker pull portainer/portainer
-docker pull portainer/agent
-docker pull storidge/cio
-docker pull storidge/nfs
 
 # kubectl get nodes
 # kubectl get pods --all-namespaces

@@ -1,5 +1,15 @@
 #! /bin/bash
 
+# Enable /dev/sdb
+sudo pvcreate /dev/sdb
+sudo vgcreate vol1 /dev/sdb
+sudo lvcreate -l 100%FREE -n data vol1
+
+# Enable /dev/sdc
+sudo pvcreate /dev/sdc
+sudo vgcreate vol2 /dev/sdc
+sudo lvcreate -l 100%FREE -n data vol2
+
 yum remove -y vim-minimal
 yum install -y vim-enhanced
 yum install -y sudo
