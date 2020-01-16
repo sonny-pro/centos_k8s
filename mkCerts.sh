@@ -5,7 +5,7 @@ export IPADDR=$(hostname -i)
 rm -f cert.pem cert.csr key.pem server-cert.pem server-cert.csr server-key.pem
 
 openssl genrsa -aes256 -out csr/ca-key.pem 4096
-openssl req -new -x509 -days 365 -key csr/ca-key.pem -sha256 -out csr/ca.pem
+openssl req -new -x509 -days 365 -key csr/ca-key.pem -sha256 -out csr/ca.pem -config csr/ca.cfg
 
 openssl req -newkey rsa:4096 -nodes -keyout csr/server-key.pem -out csr/server-cert.csr -config csr/server-cert.cfg
 openssl req -newkey rsa:4096 -nodes -keyout csr/key.pem -out csr/cert.csr -config csr/cert.cfg
