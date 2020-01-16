@@ -1,6 +1,6 @@
 #! /bin/bash
 
-sudo chmod -v 0400 csr/key.pem csr/server-key.pem
+sudo chmod -v 0400 csr/ca-key.pem csr/key.pem csr/server-key.pem
 sudo chmod -v 0444 csr/ca.pem csr/server-cert.pem csr/cert.pem
 
 sudo cp -f csr/ca.pem /etc/pki/ca-trust/source/anchors/
