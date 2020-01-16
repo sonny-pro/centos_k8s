@@ -19,7 +19,7 @@ sudo chown -R sonny: /home/sonny/.docker
 sudo cat << EOF > daemon.json
 {
 	"debug": true,
-	"hosts": ["fd://", "tcp://$HOSTNAME:2376"],
+	"hosts": ["fd://", "tcp://$HOSTNAME.sonnyg.io:2376"],
 	"tls": true,
 	"tlsverify": true,
 	"tlscacert": "/etc/pki/tls/certs/ca-bundle.crt",
@@ -30,8 +30,8 @@ EOF
 
 sudo mv daemon.json /etc/docker/
 
-sudo sed -i "\$aexport DOCKER_HOST=tcp://$HOSTNAME:2376 DOCKER_TLS_VERIFY=1" /home/sonny/.bash_profile
-sudo sed -i "\$aexport DOCKER_HOST=tcp://$HOSTNAME:2376 DOCKER_TLS_VERIFY=1" /root/.bash_profile
+sudo sed -i "\$aexport DOCKER_HOST=tcp://$HOSTNAME.sonnyg.io:2376 DOCKER_TLS_VERIFY=1" /home/sonny/.bash_profile
+sudo sed -i "\$aexport DOCKER_HOST=tcp://$HOSTNAME.sonnyg.io:2376 DOCKER_TLS_VERIFY=1" /root/.bash_profile
 source /home/sonny/.bash_profile
 
 sudo systemctl daemon-reload
